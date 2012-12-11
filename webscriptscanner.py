@@ -1,6 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
+#------------------------------------------------------------------------------------------------
+#Description: Ferramenta que efectua scan aos scripts dos websites, procura padrões especificados
+#no ficheiro de assinaturas (yara.sig)
+#Version:1.
+#Author: Helder Miguel Fernandes<helder.fernandes1279@gmail.com>
+#ScriptName:WebScriptscanner.py
+#Lib requirements: BeautifulSoup, yara
+#------------------------------------------------------------------------------------------------
 
 from __future__ import with_statement
 import re, sys, os, shlex,urllib2,time,os,StringIO,yara,socket,httplib,commands
@@ -35,7 +42,7 @@ def get_redirect_status(host,referer):
     except StandardError, e:
         print "%s" % str(e)
         return None
-
+    
 def scan_redirect(url,report):
 
    redirect_strings=['http://www.google.com/url?sa','http://search.aol.com/aol/search','http://search.yahoo.com/search','http://www.bing.com/search']
@@ -174,11 +181,11 @@ def get_scripts(website):
  while(x < sizeofweb):
   if(insidescript==1 and not re.search('/script>',website[x])):
     scripts[y]+=website[x]  
-  if(re.search('/script>',website[x]) and insidescript==1):
+  if((re.search('/script>',website[x]) or re.search('/script-->',website[x])) and insidescript==1):
     scripts[y]+=website[x][:website[x].find('/script>')+8]
     insidescript=0
   if(re.search('<script',website[x])):
-   if(re.search('<script',website[x]) and re.search('/script>',website[x])):
+   if(re.search('<script',website[x]) and (re.search('/script>',website[x]) or re.search('/script-->',website[x]))):
     low=website[x].find('<script')
     high=website[x].find('/script>')+8
     scripts.append(website[x][low:high])
@@ -192,6 +199,7 @@ def get_scripts(website):
 
 def get_script_sources(url,scripts):
  sources=[]
+
  for line in scripts:
    if(line.find(' src=') > -1 and line.find('.js') > 1  and line.find('function()') < 0 and line.find('location.hostname') < 0 and line.find('google-analytics') < 0 and line.find('googleapis') < 0 and re.search(' src=\'http://',line) < 0 and re.search('src="http://',line) < 0 and re.search('src=%27http://',line) < 0):
     low=line.find('src=')+5
@@ -258,7 +266,7 @@ if(len(sys.argv) == 1):
  print "-l file           -> scan all websites in file"
  print "=========================================="
  print "[Redirect Test]:"
- print "-r		  -> Referer Test enabled (This switch will search for redirects when the website is accessed through Google,msn,bing and yahoo)"
+ print "-r		  -> Referer Test enabled"
  print "=========================================="
  print "[case ID]:"
  print "-id caseid	  -> Set caseID directory"
@@ -369,7 +377,7 @@ else:
   print "-l file           -> scan all websites in file"
   print "=========================================="
   print "[Redirect Test]:"
-  print "-r		  -> Redirect Test enabled (This switch will search for redirects when the website is accessed through Google,msn,bing and yahoo)"
+  print "-r		  -> Redirect Test enabled"
   print "=========================================="
   print "[case ID]:"
   print "-id caseid	  -> Set caseID directory"

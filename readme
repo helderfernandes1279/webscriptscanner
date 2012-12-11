@@ -1,7 +1,14 @@
-#Author: Helder Miguel Fernandes<helder.fernandes1279@gmail.com>
-#ScriptName:webScriptscanner.py
-#Lib requirements: BeautifulSoup, yara,python defaults
-#------------------------------------------------------------------------------------------------
+Author: Helder Miguel Fernandes<helder.fernandes1279@gmail.com>
+
+ScriptName:webScriptscanner.py
+
+
+Python Lib requirements: 
+
+  -BeautifulSoup - http://www.crummy.com/software/BeautifulSoup/
+  -yara - http://yara-project.googlecode.com/svn/trunk/yara-python/
+  -python defaults
+
 
 This tool lets you quickly detect patterns of malicious code (most often obfuscated) written in javascript, detection is configurable via a signature file (yara.sig)
 
@@ -18,4 +25,5 @@ ex:
 webscriptscanner.py -u URL   -> scan the URL 
 
 webscriptscanner.py -ip IP   -> scan's the URL's detected in the server 
-
+ 
+webscriptscanner.py -u/-ip URL/IP -r   -> scan's the target and test if the HTTP GET is redirected when referer is set with google,yahoo,msn or BING search
