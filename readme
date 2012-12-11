@@ -1,26 +1,21 @@
-#Description: Ferramenta que efectua scan aos scripts dos websites, procura padrões especificados
-#no ficheiro de assinaturas (yara.sig)
 #Author: Helder Miguel Fernandes<helder.fernandes1279@gmail.com>
-#ScriptName:WebScriptscanner.py
-#Lib requirements: BeautifulSoup, yara
+#ScriptName:webScriptscanner.py
+#Lib requirements: BeautifulSoup, yara,python defaults
 #------------------------------------------------------------------------------------------------
 
+This tool lets you quickly detect patterns of malicious code (most often obfuscated) written in javascript, detection is configurable via a signature file (yara.sig)
 
+Besides the existing subscriptions is also possible to add more detection patterns by means of regular expressions and in line with the rules of Yara lib.
 
 Files:
 
-settings.conf -> ficheiro que contem o directorio onde vao ser armazenados os reports
-WebScriptscanner.py -> script que efectua o scan
-yara.sig -> ficheiro de assinaturas, o formato das assinaturas é yara
+settings.conf -> this file contains the report's folder path(must be created)
+webscriptscanner.py -> Main script
+yara.sig -> signatures file (YARA)
 
+ex:
 
+webscriptscanner.py -u URL   -> scan the URL 
 
-
-utilização:
-
-WebScriptscanner.py -u URL   -> efectua um scan ao URL introduzido
-
-WebScriptscanner.py -ip IP   -> efectua um scan ao IP introduzido
-
-
+webscriptscanner.py -ip IP   -> scan's the URL's detected in the server 
 
