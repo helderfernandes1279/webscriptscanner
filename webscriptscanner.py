@@ -102,6 +102,7 @@ def scan_website(url,rules,report,files_path):
    website = urlresponse.read()
    domain=url.replace('http://','')
    if(domain.find('/')>0):domain=domain[:domain.find('/')]
+   if(domain.find(':')>0):domain=domain[:domain.find(':')]
    host_ip=socket.gethostbyname(domain)
    print "\n%s (%s)" % (url,host_ip)
    report.write("\n%s (%s)\n" % (url,host_ip))
