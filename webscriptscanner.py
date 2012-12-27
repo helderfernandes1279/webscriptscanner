@@ -143,7 +143,7 @@ def scan_website(url,rules,report,files_path):
      if(result!=0):
       print "%s --> %s" % (result,line)
       report.write("%s --> %s\n" % (result,line))
-      url_report.write(line+"\n")
+      url_report.write(line+" \n")
       detected=True
       dirname=url[7:]
       dirname=dirname.replace('/','_')
