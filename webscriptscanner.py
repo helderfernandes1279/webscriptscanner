@@ -163,6 +163,14 @@ def scan_website(url,rules,report,files_path):
      print "--Cannot not open %s" % (line)
      report.write("--Cannot not open %s\n" % (line))
      e=''
+    except urllib2.HTTPError, e:
+     print "--Cannot not open %s" % (line)
+     report.write("--Cannot not open %s\n" % (line))
+     e=''
+    except httplib.HTTPException, e:
+     print "--Cannot not open %s" % (line)
+     report.write("--Cannot not open %s\n" % (line))
+     e=''
    url_report.close()
   except urllib2.URLError, e: 
    print "Cannot open %s" % (url)
