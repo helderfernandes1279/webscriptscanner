@@ -215,7 +215,7 @@ def get_script_sources(url,scripts):
  sources=[]
 
  for line in scripts:
-   if(line.find(' src=') > -1 and line.find('.js') > 1  and line.find('function()') < 0 and line.find('location.hostname') < 0 and line.find('google-analytics') < 0 and line.find('googleapis') < 0 and re.search(' src=\'http://',line) < 0 and re.search('src="http://',line) < 0 and re.search('src=%27http://',line) < 0):
+   if(line.find(' src=') > -1 and line.find('.js') > 1  and line.find('function()') < 0 and line.find('location.hostname') < 0 and line.find('google-analytics') < 0 and line.find('googleapis') < 0 and re.search(' src=\'http://',line) < 0 and re.search('src="http://',line) < 0 and re.search('src=%27http://',line) < 0 and re.search('src="https://',line) < 0 and re.search(' src=\'https://',line) < 0 and re.search('src=%27https://',line) < 0):
     low=line.find('src=')+5
     high=line.find('.js')+3
     if(line[low]!='/'):
@@ -225,7 +225,7 @@ def get_script_sources(url,scripts):
     else: 
      sources.append(url+line[low:high])
    
-   if((re.search(' src=\'http://',line) > -1 or re.search(' src="http://',line)) and line.find('googleapis') < 0 and line.find('location.hostname') < 0 and line.find('google-analytics') < 0 and line.find('.js') > 1):
+   if((re.search(' src=\'http://',line) > -1 or re.search(' src="http://',line) or re.search(' src=\'https://',line) > -1 or re.search(' src=\'https://',line) > -1) and line.find('googleapis') < 0 and line.find('location.hostname') < 0 and line.find('google-analytics') < 0 and line.find('.js') > 1):
      low=line.find('src=')+5
      high=line.find('.js')+3
      sources.append(line[low:high])
