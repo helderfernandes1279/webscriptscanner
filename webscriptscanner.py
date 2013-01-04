@@ -99,6 +99,18 @@ def scan_website(url,rules,report,files_path):
   request.add_header('User-Agent', 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)')
   url_report=open(report_path+'/detected_urls.txt','a')
   try:
+   URL_status=get_redirect_status(url.replace('http://',''),url)
+   if not URL_status is None:
+    if URL_status.status==301 or URL_status.status==302:
+     for ln in URL_status.getheaders():
+      if(re.search('location',ln[0])):
+       if not (re.search(url,ln[1])):
+	 print "\n"+url+" redirects to %s, scanning redirect location" %ln[1]
+	 report.write("\n"+url+" redirects to "+ln[1]+", scanning redirect location") 
+	 report.write("\n"+ln[1]+"\n") 
+	 url=ln[1]
+         request = urllib2.Request("%s" % url)
+         request.add_header('User-Agent', 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)')
    urlresponse=urllib2.urlopen(request)
    website = urlresponse.read()
    domain=url.replace('http://','')
