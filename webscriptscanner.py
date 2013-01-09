@@ -10,14 +10,16 @@
 #------------------------------------------------------------------------------------------------
 
 from __future__ import with_statement
-import re, sys, os, shlex,urllib2,time,os,StringIO,yara,socket,httplib,commands
+import re, sys, os, shlex,urllib2,time,os,StringIO,yara,socket,httplib,commands,socket
 from time import gmtime, strftime
 from urlparse import urlparse
 from BeautifulSoup import BeautifulSoup as bs
 from zipfile import ZipFile, ZIP_DEFLATED
 from contextlib import closing
 
+default_timeout = 5
 
+socket.setdefaulttimeout(default_timeout)
 
 def zip_files(folder,reportpath,archive,password):
  os.chdir(reportpath)
