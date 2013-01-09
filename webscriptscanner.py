@@ -108,7 +108,6 @@ def scan_website(url,rules,report,files_path):
       if(re.search('location',ln[0])):
        if not (re.search(url.replace('http://',''),ln[1])):
 	if(re.search('http://',ln[1])):
-	 print ln[1]
 	 print "\n"+url+" redirects to %s, scanning redirect location" %ln[1]
 	 report.write("\n"+url+" redirects to "+ln[1]+", scanning redirect location") 
 	 report.write("\n"+ln[1]+"\n") 
