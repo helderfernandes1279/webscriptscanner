@@ -17,7 +17,7 @@ from BeautifulSoup import BeautifulSoup as bs
 from zipfile import ZipFile, ZIP_DEFLATED
 from contextlib import closing
 
-default_timeout = 5
+default_timeout = 10
 
 socket.setdefaulttimeout(default_timeout)
 
@@ -178,22 +178,27 @@ def scan_website(url,rules,report,files_path):
        print "Could not save file  reason ->%s" %str(e)
        report.write("Could not save file\n")
     except urllib2.URLError, e:
-     print "--Cannot not open %s" % (line)
+     print "--Cannot not open %s\n" % (line)
      report.write("--Cannot not open %s\n" % (line))
      e=''
     except urllib2.HTTPError, e:
-     print "--Cannot not open %s" % (line)
+     print "--Cannot not open %s\n" % (line)
      report.write("--Cannot not open %s\n" % (line))
      e=''
     except httplib.HTTPException, e:
-     print "--Cannot not open %s" % (line)
+     print "--Cannot not open %s\n" % (line)
      report.write("--Cannot not open %s\n" % (line))
      e=''
    url_report.close()
   except urllib2.URLError, e: 
-   print "Cannot open %s" % (url)
+   print "Cannot open %s\n" % (url)
    report.write("Cannot open %s\n" % (url))
-  
+  except socket.timeout, e:
+   print "Cannot open %s\n" % (url)
+   report.write("Cannot open %s\n" % (url))
+  except socket.error, e:
+   print "Cannot open %s\n" % (url)
+   report.write("Cannot open %s\n" % (url))
   return detected
 
 
