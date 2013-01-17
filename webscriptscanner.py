@@ -97,6 +97,7 @@ def get_urls_by_ip(ip):
 
 def scan_website(url,rules,report,files_path):
   detected=False
+  contenttype="http"
   request = urllib2.Request("%s" % url)
   request.add_header('User-Agent', 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)')
   url_report=open(report_path+'/detected_urls.txt','a')
@@ -127,18 +128,28 @@ def scan_website(url,rules,report,files_path):
    pattern=re.compile("<script>",re.IGNORECASE)
    website=pattern.sub("<script>",website)
    buf = StringIO.StringIO(website)
-   website=buf.readlines()
-   fullsite=""
-   for l in website:
-    fullsite+=l
-   scripts=get_scripts(website)
-   script_sources=get_script_sources(url,get_scripts(website))
-   for line in scripts:
-    result=script_scanner(rules,line)
-    if(result!=0):
-     print "--%s found in root" % (result)
-     report.write("--%s found in root\n" % (result))
-     detected=True
+   script_sources=""
+   if(re.search('x-javascript',urlresponse.info().getheader('Content-Type'))):
+     result=script_scanner(rules,website)
+     if(result!=0):
+      print "--%s found in JSFfile" % (result)
+      report.write("--%s found in JSFile\n" % (result))
+      contenttype="JS"
+      detected=True
+      fullsite=website
+   else:
+    website=buf.readlines()
+    fullsite=""
+    for l in website:
+     fullsite+=l
+    scripts=get_scripts(website)
+    script_sources=get_script_sources(url,get_scripts(website))
+    for line in scripts:
+     result=script_scanner(rules,line)
+     if(result!=0):
+      print "--%s found in root" % (result)
+      report.write("--%s found in root\n" % (result))
+      detected=True
    if(detected==True):  
     dirname=url[7:]
     dirname=dirname.replace('/','_')
@@ -146,8 +157,11 @@ def scan_website(url,rules,report,files_path):
      os.mkdir(files_path)
     if not os.path.isdir(os.path.join(files_path, dirname)):
      os.mkdir(os.path.join(files_path, dirname))
-    url_report.write(url+"\n")	
-    f=open(os.path.join(files_path,dirname)+'/'+'index.html','w')
+    url_report.write(url+"\n")
+    if(contenttype=='JS'): 
+     f=open(os.path.join(files_path,dirname)+'/'+dirname[dirname.rfind('_')+1:],'w')
+    else:
+     f=open(os.path.join(files_path,dirname)+'/'+'index.html','w')
     f.write(fullsite)
     f.close()
     
