@@ -16,7 +16,7 @@ Besides the existing subscriptions is also possible to add more detection patter
 
 Files:
 
-settings.conf -> this file contains the report's folder path(must be created)
+settings.conf -> this file contains the path of the scan reports (must be created)
 webscriptscanner.py -> Main script
 yara.sig -> signatures file (YARA)
 
