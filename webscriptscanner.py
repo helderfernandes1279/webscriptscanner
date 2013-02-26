@@ -73,24 +73,50 @@ def scan_redirect(url,report):
    return detected
     
 
-#função retorna a lista de urls registada no bgp
+#funções que retornam a lista de urls registada no bgp e robtex
 
-def get_urls_by_ip(ip):
- request = urllib2.Request("http://bgp.he.net/ip/%s" % ip)
+def get_urls_bgp(ip):
+ request = urllib2.Request("http://bgp.he.net/ip/%s" %ip)
  request.add_header('User-Agent', 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)')
  bgp = bs(urllib2.urlopen(request))
  wls = []
  websiteslist = []
-
- 
  for dn in bgp('a'):
   if re.match('/dns/',dn['href']):
-   wls.append(dn.string)
+    wls.append(dn.string)
     
  for website in wls:
-  websiteslist.append("http://"+website)
+   websiteslist.append("http://"+website)
 
- return websiteslist 
+ return websiteslist
+
+def get_urls_robtex(ip):
+ request = urllib2.Request("http://ip.robtex.com/%s.html" % ip)
+ request.add_header('User-Agent', 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)')
+ robtex = bs(urllib2.urlopen(request))
+ websiteslist = []
+ tmp=robtex.findAll("span",{"id":re.compile("dns")})
+
+ a=bs(str(tmp))
+
+ for url in a('a'):
+   websiteslist.append("http://"+url.string)
+ 
+ return websiteslist
+
+
+
+def get_urls_by_ip(ip):
+ list1=get_urls_bgp(ip)
+ list2=get_urls_robtex(ip)
+ urllist=[]
+ for ln in list1:
+  urllist.append(ln)
+ for ln in list2:
+  urllist.append(ln)
+ sorted_url=list(set(urllist))
+ sorted_url.sort()               
+ return sorted_url
 
 
 #função que recebe o url e faz um scan aos scripts do mesmo e escreve num ficheiro os scripts detectados como maliciosos
