@@ -121,8 +121,8 @@ def scan_website(url,rules,report,files_path):
    if(domain.find('/')>0):domain=domain[:domain.find('/')]
    if(domain.find(':')>0):domain=domain[:domain.find(':')]
    host_ip=socket.gethostbyname(domain)
-   print "\n%s (%s)" % (url,host_ip)
-   report.write("\n%s (%s)\n" % (url,host_ip))
+   print "\n%s [%s]" % (url,host_ip)
+   report.write("\n%s [%s]\n" % (url,host_ip))
    pattern=re.compile("</script>",re.IGNORECASE)
    website=pattern.sub("</script>\n",website)
    pattern=re.compile("<script>",re.IGNORECASE)
@@ -144,13 +144,18 @@ def scan_website(url,rules,report,files_path):
      fullsite+=l
     scripts=get_scripts(website)
     script_sources=get_script_sources(url,get_scripts(website))
+    detected_count=0;
     for line in scripts:
      result=script_scanner(rules,line)
      if(result!=0):
-      print "--%s found in root" % (result)
-      report.write("--%s found in root\n" % (result))
-      detected=True
+	  detection=result
+	  detected_count=detected_count+1
+	  detected=True
+    
+      
    if(detected==True):  
+    print "--"+str(detection)+" found in root - %d time(s)" % (detected_count)
+    report.write("--"+str(detection)+" found in root - %d time(s)\n" % (detected_count))
     dirname=url[7:]
     dirname=dirname.replace('/','_')
     if not os.path.isdir(files_path):
@@ -322,7 +327,7 @@ if(len(sys.argv) == 1):
  print "-id caseid	  -> Set caseID directory"
  sys.exit()
 else:
- 
+ report_logs=open('folder.log','a')
  if(len(sys.argv)>3 and len(sys.argv)<6):
   if(sys.argv[3]=='-r'):
    redirect=True
@@ -351,10 +356,13 @@ else:
   if not os.path.isdir(report_path):
     os.mkdir(report_path)
   report=open(report_path+'/report-'+scantime+'.txt','a')
- report.write("\n==========Scan started at "+formatedscantime+"======================\n") 
+ report.write("\n==========Analysis started at "+formatedscantime+"======================\n") 
 
  if sys.argv[1]=='-u' and badparameter==0:
+  report_logs.write(scantime+";"+sys.argv[2]+"\n")
+  report_logs.close()
   if(re.search('http://',sys.argv[2])):
+   
    detected=scan_website(sys.argv[2],rules,report,report_path+'Files/')
    if(detected==True):
     print "Web site is infected"
@@ -375,6 +383,8 @@ else:
     zip_files("./Files",report_path,"Sample-"+archivename+".zip","infected")
  
  elif sys.argv[1]=='-ip' and badparameter==0:
+  report_logs.write(scantime+";"+sys.argv[2]+"\n")
+  report_logs.close()
   websites=get_urls_by_ip(sys.argv[2])
   x=0
   for website in websites:
@@ -392,6 +402,8 @@ else:
     zip_files("./Files",report_path,"Sample-"+archivename+".zip","infected")
  
  elif sys.argv[1]=='-l' and badparameter==0:
+  report_logs.write(scantime+";list from file "+sys.argv[2]+"\n")
+  report_logs.close()
   f = open(sys.argv[2], "r")
   url_list = f.readlines()
   f.close()
