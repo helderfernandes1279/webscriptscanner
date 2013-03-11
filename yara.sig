@@ -47,9 +47,10 @@ rule Malicious_Redirect_Code
 		$long4=/([0-9a-zA-Z]{1,2}(\$|@|#|@){1,2}){8}/
 		$long5=/("[0-9a-zA-Z]{1,2}",){16}/
 		$long6=/([0-9a-zA-Z]{2,3}&&){256}/
+		$long7=/(0x[0-9a-fA-F]{1,2},){256}/
 		$maliciousfor=/for\((.)=(.){1,10};(.){5}!=(.);(.)\+\+\)/
 		$maliciousif=/if\('[a-zA-Z]{3,8}'=='[a-zA-Z]{3,8}'\)/
         condition:
-                ($js and $js2) or ($long or $long2 or $long3 or $long4 or $long6) or ($js3 and $js4) or ($js5 and $js6 and $js7) or ($long5 and $maliciousfor) or $maliciousif or $js8
+                ($js and $js2) or ($long or $long2 or $long3 or $long4 or $long6) or ($js3 and $js4) or ($js5 and $js6 and $js7) or ($long5 and $maliciousfor) or $maliciousif or $js8 or $long7
 }
 
