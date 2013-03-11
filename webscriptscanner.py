@@ -295,11 +295,12 @@ def get_script_sources(url,scripts):
      sources.append(url+line[low:high])
    
    if((re.search(' src=\'http://',line.lower()) > -1 or re.search(' src="http://',line.lower()) or re.search(' src=\'https://',line.lower()) > -1 or re.search(' src=\'https://',line.lower()) > -1) and line.lower().find('googleapis') < 0 and line.lower().find('location.hostname') < 0 and line.lower().find('google-analytics') < 0 and line.lower().find('.js') > 1 and line.lower().find('function') < 0):
-     low=line.find('src=')+5
-     high=line.find('.js')+3
+
+     low=line.lower().find('src=')+5
+     high=line.lower().find('.js')+3
      sources.append(line[low:high])
      
-
+ 
  return sources
 
 
