@@ -99,8 +99,10 @@ def get_urls_robtex(ip):
 
  a=bs(str(tmp))
 
+
  for url in a('a'):
-   websiteslist.append("http://"+url.string)
+   if not url.string is None:
+    websiteslist.append("http://"+url.string)
  
  return websiteslist
 
