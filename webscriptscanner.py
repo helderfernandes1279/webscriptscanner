@@ -356,7 +356,7 @@ if(len(sys.argv) == 1):
  print "-id caseid	  -> Set caseID directory"
  sys.exit()
 else:
- report_logs=open('folder.log','a')
+ report_logs=open(report_path+'/folder.log','a')
  if(len(sys.argv)>3 and len(sys.argv)<6):
   if(sys.argv[3]=='-r'):
    redirect=True
