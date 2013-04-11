@@ -255,12 +255,16 @@ def scan_website(url,rules,report,files_path):
 
 #funcao que recebe o site num array de linhas e devolve todos os scripts existentes
 
-def get_scripts(website):
+def get_scripts(originalwebsite):
  scripts = []
- sizeofweb=len(website)
+ sizeofweb=len(originalwebsite)
  x=0
  y=-1
  insidescript=0
+ website = []
+ for line in originalwebsite:
+  website.append(line.lower())
+
  while(x < sizeofweb):
   if(insidescript==1 and not re.search('/script>',website[x])):
     scripts[y]+=website[x]  
